@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MarketInsight AI — Rapid Market Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F1F3F4;
+    --card: #FFFFFF;
+    --text-primary: #202124;
+    --text-secondary: #5F6368;
+    --accent: #1A73E8;
+    --accent-light: #E8F0FE;
+    --accent-hover: #1557B0;
+    --border: #DADCE0;
+    --shadow-sm: 0 1px 3px rgba(60,64,67,.08), 0 1px 2px rgba(60,64,67,.06);
+    --shadow-md: 0 4px 16px rgba(60,64,67,.10), 0 2px 6px rgba(60,64,67,.06);
+    --shadow-lg: 0 8px 32px rgba(60,64,67,.12), 0 4px 12px rgba(60,64,67,.08);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-pill: 999px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    height: 60px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 15px; color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-logo-icon svg { width: 18px; height: 18px; }
+
+  .nav-links { display: flex; gap: 4px; }
+
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    text-decoration: none; padding: 6px 14px; border-radius: var(--radius-sm);
+    transition: background .15s, color .15s;
+  }
+  .nav-links a:hover { background: var(--bg); color: var(--text-primary); }
+  .nav-links a.active { color: var(--accent); background: var(--accent-light); }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 72px 24px 48px;
+    max-width: 760px; margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent-light); color: var(--accent);
+    font-size: 12px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: var(--radius-pill);
+    margin-bottom: 24px;
+    animation: fadeUp .5s ease both;
+  }
+
+  .hero-badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); animation: pulse 1.8s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:.5; transform:scale(1.4); }
+  }
+
+  .hero h1 {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(36px, 6vw, 54px);
+    font-weight: 700; line-height: 1.12;
+    letter-spacing: -.5px;
+    color: var(--text-primary);
+    animation: fadeUp .5s .1s ease both;
+  }
+
+  .hero-sub {
+    font-size: 17px; color: var(--text-secondary);
+    font-weight: 400; line-height: 1.6;
+    margin-top: 14px;
+    animation: fadeUp .5s .2s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(16px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-wrap {
+    margin-top: 36px;
+    animation: fadeUp .5s .3s ease both;
+  }
+
+  .search-box {
+    display: flex; align-items: center; gap: 0;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-md);
+    padding: 6px 6px 6px 20px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+
+  .search-box:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(26,115,232,.12), var(--shadow-md);
+  }
+
+  .search-icon { color: var(--text-secondary); flex-shrink: 0; margin-right: 4px; }
+
+  .search-input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-family: inherit; font-size: 15px; color: var(--text-primary);
+    font-weight: 400;
+  }
+
+  .search-input::placeholder { color: #9AA0A6; }
+
+  .search-btn {
+    flex-shrink: 0;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: var(--radius-pill);
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    padding: 10px 24px; cursor: pointer;
+    transition: background .18s, transform .12s, box-shadow .18s;
+    box-shadow: 0 2px 8px rgba(26,115,232,.3);
+  }
+
+  .search-btn:hover { background: var(--accent-hover); box-shadow: 0 4px 16px rgba(26,115,232,.35); }
+  .search-btn:active { transform: scale(.97); }
+
+  /* ── CHIPS ── */
+  .chips {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+    margin-top: 18px;
+    animation: fadeUp .5s .4s ease both;
+  }
+
+  .chip {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    padding: 7px 16px; cursor: pointer;
+    transition: all .18s;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .chip:hover {
+    border-color: var(--accent); color: var(--accent);
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .chip.active {
+    border-color: var(--accent); color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  /* ── RESULTS AREA ── */
+  #results-area {
+    max-width: 900px; margin: 0 auto; padding: 0 24px 80px;
+  }
+
+  /* Empty state */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 64px 24px;
+    animation: fadeUp .4s ease both;
+  }
+
+  .empty-icon {
+    width: 72px; height: 72px; border-radius: 20px;
+    background: var(--card); border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+  }
+
+  .empty-state h3 { font-size: 17px; font-weight: 600; color: var(--text-primary); }
+  .empty-state p { font-size: 14px; color: var(--text-secondary); margin-top: 6px; text-align: center; line-height: 1.6; }
+
+  /* Results */
+  .results-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 24px;
+    animation: fadeUp .3s ease both;
+  }
+
+  .results-query { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+  .results-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 26px; font-weight: 700; color: var(--text-primary); line-height: 1.2;
+  }
+
+  .results-meta {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; color: var(--accent);
+    background: var(--accent-light); padding: 5px 12px; border-radius: var(--radius-pill);
+    flex-shrink: 0; margin-top: 4px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* Cards */
+  .insight-card {
+    background: var(--card); border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    animation: fadeUp .4s ease both;
+  }
+
+  .insight-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: #C5D8FC;
+  }
+
+  .card-icon-wrap {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; font-size: 20px;
+  }
+
+  .card-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-size: 15px; font-weight: 600; color: var(--text-primary);
+    line-height: 1.4; margin-bottom: 10px;
+  }
+
+  .card-body {
+    font-size: 13.5px; color: var(--text-secondary); line-height: 1.65;
+  }
+
+  .card-stat {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 14px; padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 12px; font-weight: 600;
+  }
+
+  /* Wide card */
+  .insight-card.wide {
+    grid-column: 1 / -1;
+  }
+
+  /* Signal bar */
+  .signal-bar {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px;
+    margin-bottom: 16px; box-shadow: var(--shadow-sm);
+    animation: fadeUp .35s ease both;
+  }
+
+  .signal-bar-title {
+    font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
+    color: var(--text-secondary); margin-bottom: 14px;
+  }
+
+  .signals {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+
+  .signal {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-pill); padding: 6px 14px;
+    font-size: 13px; color: var(--text-primary); font-weight: 500;
+  }
+
+  .signal-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Loader */
+  .loader {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 14px; padding: 64px 24px;
+    animation: fadeUp .3s ease both;
+  }
+
+  .loader-dots { display: flex; gap: 8px; }
+
+  .loader-dot {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--accent);
+    animation: bounce 1.2s ease infinite;
+  }
+
+  .loader-dot:nth-child(2) { animation-delay: .15s; }
+  .loader-dot:nth-child(3) { animation-delay: .3s; }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); opacity:.6; }
+    50% { transform: translateY(-10px); opacity:1; }
+  }
+
+  .loader-text { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+  .loader-sub { font-size: 12px; color: #9AA0A6; }
+
+  /* Divider */
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
+    color: var(--text-secondary); margin: 24px 0 14px;
+    animation: fadeUp .35s ease both;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; }
+    .hero { padding: 48px 16px 32px; }
+    #results-area { padding: 0 16px 60px; }
+    .results-grid { grid-template-columns: 1fr; }
+    .insight-card.wide { grid-column: 1; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="10" width="3" height="8" rx="1.5" fill="white" opacity=".7"/>
+        <rect x="8" y="6" width="3" height="12" rx="1.5" fill="white"/>
+        <rect x="14" y="2" width="3" height="16" rx="1.5" fill="white" opacity=".85"/>
+      </svg>
+    </div>
+    MarketInsight AI
+  </a>
+  <div class="nav-links">
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Live Intelligence Engine
+  </div>
+  <h1>Rapid Market Intelligence</h1>
+  <p class="hero-sub">Aggregate macro signals and produce synthesised industry insights in seconds.</p>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input id="search-input" class="search-input" type="text" placeholder="Enter a technology shift or industry trend..." autocomplete="off" />
+      <button class="search-btn" id="search-btn">Analyze</button>
+    </div>
+  </div>
+
+  <div class="chips" id="chips">
+    <div class="chip" data-query="generative-ai">Generative AI adoption in enterprise</div>
+    <div class="chip" data-query="data-platform">Data platform consolidation trends 2024</div>
+    <div class="chip" data-query="cloud-fintech">Cloud migration strategies for fintech</div>
+    <div class="chip" data-query="open-source-llm">Open-source LLM ecosystem growth</div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results-area">
+  <!-- Filled by JS -->
+  <div class="empty-state" id="empty-state">
+    <div class="empty-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9AA0A6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </div>
+    <h3>Ready to analyze</h3>
+    <p>Enter a topic above to start gathering<br>synthesised market intelligence.</p>
+  </div>
+  <div id="results-content" style="display:none;"></div>
+</section>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const INSIGHTS = {
+
+  "generative-ai": {
+    title: "Generative AI Adoption in Enterprise",
+    signals: [
+      { label: "Investment Surge", color: "#1A73E8" },
+      { label: "Productivity Gains", color: "#34A853" },
+      { label: "Regulatory Scrutiny", color: "#EA4335" },
+      { label: "Talent Demand", color: "#FBBC04" },
+      { label: "Platform Consolidation", color: "#9C27B0" },
+    ],
+    cards: [
+      {
+        icon: "📈", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Market Trajectory", labelColor: "#1A73E8",
+        title: "Enterprise GenAI spend projected to reach $151B by 2027",
+        body: "Gartner reports that 55% of enterprise leaders have piloted at least one generative AI use case as of Q1 2024. Spend is accelerating across legal, HR, and software engineering functions.",
+        stat: "↑ 38% YoY", statBg: "#E8F0FE", statColor: "#1A73E8"
+      },
+      {
+        icon: "🏭", iconBg: "#E6F4EA", iconColor: "#34A853",
+        label: "Sector Adoption", labelColor: "#34A853",
+        title: "Financial services and healthcare lead vertical deployment",
+        body: "FS firms are deploying GenAI for compliance summarisation, fraud pattern detection, and client-facing chat. Healthcare is focused on clinical documentation and diagnostics support.",
+        stat: "Top 2 sectors", statBg: "#E6F4EA", statColor: "#34A853"
+      },
+      {
+        icon: "⚠️", iconBg: "#FEF7E0", iconColor: "#F9AB00",
+        label: "Risk Signals", labelColor: "#F9AB00",
+        title: "Data governance and hallucination risk remain primary blockers",
+        body: "Enterprise adoption is slowing in regulated verticals due to unresolved questions around model transparency, data residency, and audit trail requirements under GDPR and SOX.",
+        stat: "62% cite as blocker", statBg: "#FEF7E0", statColor: "#F9AB00"
+      },
+      {
+        icon: "🔧", iconBg: "#F3E8FD", iconColor: "#9C27B0",
+        label: "Platform Plays", labelColor: "#9C27B0",
+        title: "Microsoft, Google, and Salesforce dominating enterprise GenAI distribution",
+        body: "Incumbent SaaS providers are embedding GenAI natively rather than offering standalone products. Microsoft Copilot and Salesforce Einstein are gaining significant enterprise attach rates.",
+        stat: "3 platform leaders", statBg: "#F3E8FD", statColor: "#9C27B0"
+      },
+      {
+        icon: "💡", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Strategic Outlook", labelColor: "#1A73E8",
+        title: "Enterprises shifting from pilots to production — centre of excellence models emerging",
+        body: "McKinsey estimates 75% of value will accrue to firms that move beyond experimentation. Dedicated GenAI CoEs are becoming standard in Fortune 500 organisations, focused on orchestration, governance, and change management.",
+        wide: true,
+        stat: "2024–2025 transition window", statBg: "#E8F0FE", statColor: "#1A73E8"
+      }
+    ]
+  },
+
+  "data-platform": {
+    title: "Data Platform Consolidation Trends",
+    signals: [
+      { label: "Snowflake vs Databricks", color: "#1A73E8" },
+      { label: "Lakehouse Momentum", color: "#34A853" },
+      { label: "Vendor Rationalisation", color: "#EA4335" },
+      { label: "Real-time Demand", color: "#FBBC04" },
+      { label: "Open Table Formats", color: "#9C27B0" },
+    ],
+    cards: [
+      {
+        icon: "🗄️", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Market Dynamics", labelColor: "#1A73E8",
+        title: "Lakehouse architecture displacing traditional data warehouse + data lake stacks",
+        body: "Enterprises with 5+ legacy data tools are consolidating onto unified platforms. Databricks and Snowflake are the primary consolidation targets, each capturing workloads from Teradata, Oracle, and on-premise Hadoop clusters.",
+        stat: "↓ 40% toolchain size avg.", statBg: "#E8F0FE", statColor: "#1A73E8"
+      },
+      {
+        icon: "⚡", iconBg: "#E6F4EA", iconColor: "#34A853",
+        label: "Technology Shift", labelColor: "#34A853",
+        title: "Apache Iceberg and Delta Lake becoming the default open table standards",
+        body: "The shift to open table formats is reducing vendor lock-in risk and enabling multi-cloud data strategies. AWS, Google, and Azure have all pledged native support for Iceberg, signalling format-layer commoditisation.",
+        stat: "3 major cloud endorsements", statBg: "#E6F4EA", statColor: "#34A853"
+      },
+      {
+        icon: "💰", iconBg: "#FEF7E0", iconColor: "#F9AB00",
+        label: "Commercial Signal", labelColor: "#F9AB00",
+        title: "Cost optimisation driving platform rationalisation decisions in 2024",
+        body: "With cloud bills under scrutiny post-2022 spend spree, data platform spend is being consolidated to 1–2 vendors. FinOps teams are quantifying the hidden cost of data movement between siloed tools.",
+        stat: "Cost cited by 71% of CDOs", statBg: "#FEF7E0", statColor: "#F9AB00"
+      },
+      {
+        icon: "🔄", iconBg: "#F3E8FD", iconColor: "#9C27B0",
+        label: "Emerging Pattern", labelColor: "#9C27B0",
+        title: "Real-time streaming capabilities becoming table stakes — Kafka integration standard",
+        body: "Batch-only architectures are losing favour. Confluent, Redpanda, and native streaming engines within Databricks and Snowflake are replacing legacy ETL patterns in customer 360 and fraud detection use cases.",
+        stat: "Real-time adoption ↑ 52%", statBg: "#F3E8FD", statColor: "#9C27B0"
+      },
+      {
+        icon: "🎯", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Strategic Outlook", labelColor: "#1A73E8",
+        title: "Data+AI convergence creating winner-take-most dynamics in platform selection",
+        body: "The ability to run ML and GenAI workloads directly on the data platform — without data movement — is becoming the decisive selection criterion. Vendors that unify storage, compute, and inference will capture the largest share of consolidation spend through 2026.",
+        wide: true,
+        stat: "2024–2026 consolidation cycle", statBg: "#E8F0FE", statColor: "#1A73E8"
+      }
+    ]
+  },
+
+  "cloud-fintech": {
+    title: "Cloud Migration Strategies for Fintech",
+    signals: [
+      { label: "Regulatory Compliance", color: "#EA4335" },
+      { label: "Hybrid Architecture", color: "#1A73E8" },
+      { label: "Cost Efficiency", color: "#34A853" },
+      { label: "Open Banking", color: "#FBBC04" },
+      { label: "Resilience Standards", color: "#9C27B0" },
+    ],
+    cards: [
+      {
+        icon: "🏦", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Migration Pattern", labelColor: "#1A73E8",
+        title: "Lift-and-shift giving way to cloud-native re-architecture in core banking",
+        body: "Tier-1 banks are moving beyond infrastructure migration to re-platforming core banking on cloud-native stacks. Temenos, Thought Machine, and Mambu are capturing greenfield and replacement business from legacy on-prem monoliths.",
+        stat: "Re-architecture: 67% of new projects", statBg: "#E8F0FE", statColor: "#1A73E8"
+      },
+      {
+        icon: "⚖️", iconBg: "#FDECEA", iconColor: "#EA4335",
+        label: "Regulatory Context", labelColor: "#EA4335",
+        title: "FCA, ECB, and MAS regulatory frameworks reshaping cloud deployment models",
+        body: "DORA (EU) and FCA's Operational Resilience framework are mandating exit strategies, concentration risk assessments, and third-party oversight — effectively forcing fintechs to design multi-cloud from day one.",
+        stat: "DORA compliance: Jan 2025 deadline", statBg: "#FDECEA", statColor: "#EA4335"
+      },
+      {
+        icon: "🔀", iconBg: "#E6F4EA", iconColor: "#34A853",
+        label: "Architecture Trend", labelColor: "#34A853",
+        title: "Hybrid cloud becoming standard — sensitive workloads retained on-premise",
+        body: "Customer PII, transaction records, and AML decision engines are staying on-premise or in private cloud zones. Non-sensitive workloads — analytics, reporting, customer comms — are migrating to public cloud first.",
+        stat: "78% adopt hybrid model", statBg: "#E6F4EA", statColor: "#34A853"
+      },
+      {
+        icon: "🔓", iconBg: "#FEF7E0", iconColor: "#F9AB00",
+        label: "Open Banking Signal", labelColor: "#F9AB00",
+        title: "API-first cloud architectures enabling embedded finance and BaaS models",
+        body: "Open banking mandates in UK, EU, and Singapore are incentivising fintechs to adopt event-driven, API-first cloud architectures. This is enabling Banking-as-a-Service partnerships with retailers and platforms at scale.",
+        stat: "BaaS market: $11B by 2026", statBg: "#FEF7E0", statColor: "#F9AB00"
+      },
+      {
+        icon: "🧭", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Strategic Outlook", labelColor: "#1A73E8",
+        title: "Cloud is no longer a cost play — it is a speed-to-market and AI-readiness play for fintech",
+        body: "The most competitive fintechs are treating cloud migration as a precondition for AI deployment, not just infrastructure modernisation. Firms with cloud-native data infrastructure are launching GenAI features 3–5x faster than legacy peers. Institutions that delay migration risk a compounding innovation gap through 2027.",
+        wide: true,
+        stat: "3–5x AI feature velocity advantage", statBg: "#E8F0FE", statColor: "#1A73E8"
+      }
+    ]
+  },
+
+  "open-source-llm": {
+    title: "Open-Source LLM Ecosystem Growth",
+    signals: [
+      { label: "Meta Llama Dominance", color: "#1A73E8" },
+      { label: "Fine-tuning Adoption", color: "#34A853" },
+      { label: "Edge Deployment", color: "#EA4335" },
+      { label: "Community Velocity", color: "#FBBC04" },
+      { label: "Proprietary Pressure", color: "#9C27B0" },
+    ],
+    cards: [
+      {
+        icon: "🦙", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Ecosystem Leader", labelColor: "#1A73E8",
+        title: "Meta's Llama series establishing open-weight model as enterprise default",
+        body: "Llama 3 downloads exceeded 300M within 6 months of release. Enterprise adoption is driven by data privacy, cost control, and the ability to fine-tune on proprietary datasets without API exposure.",
+        stat: "300M+ downloads", statBg: "#E8F0FE", statColor: "#1A73E8"
+      },
+      {
+        icon: "🔬", iconBg: "#E6F4EA", iconColor: "#34A853",
+        label: "Adoption Pattern", labelColor: "#34A853",
+        title: "Fine-tuning on domain-specific data emerging as core enterprise AI capability",
+        body: "Organisations are using LoRA and QLoRA techniques to adapt open-source base models to legal, medical, and financial domains at a fraction of the cost of training from scratch. Hugging Face has become the central hub for sharing adapted models.",
+        stat: "LoRA: 90% cost reduction vs full fine-tune", statBg: "#E6F4EA", statColor: "#34A853"
+      },
+      {
+        icon: "📱", iconBg: "#FDECEA", iconColor: "#EA4335",
+        label: "Edge Opportunity", labelColor: "#EA4335",
+        title: "Quantised models enabling on-device inference — privacy-first AI unlocked",
+        body: "4-bit and 8-bit quantisation is enabling models like Phi-3, Gemma, and Llama 3.1 8B to run on consumer hardware and mobile devices. This is creating a new category of offline-capable, privacy-preserving AI applications.",
+        stat: "< 4GB VRAM for capable models", statBg: "#FDECEA", statColor: "#EA4335"
+      },
+      {
+        icon: "🏃", iconBg: "#FEF7E0", iconColor: "#F9AB00",
+        label: "Velocity Signal", labelColor: "#F9AB00",
+        title: "Community iteration speed outpacing proprietary model release cycles",
+        body: "The open-source community is releasing significant capability improvements every 6–8 weeks, compared to 6–12 month cycles for proprietary models. Mistral, Microsoft Research, and Google DeepMind are all contributing open-weight releases.",
+        stat: "New SOTA every 6–8 weeks", statBg: "#FEF7E0", statColor: "#F9AB00"
+      },
+      {
+        icon: "⚡", iconBg: "#E8F0FE", iconColor: "#1A73E8",
+        label: "Strategic Outlook", labelColor: "#1A73E8",
+        title: "Open-source LLMs are commoditising the model layer — value shifting to data, tuning, and orchestration",
+        body: "As base model capabilities converge between open and proprietary options, competitive advantage is moving upstream to proprietary training data and downstream to application orchestration and UX. Enterprises investing in fine-tuning pipelines and RAG infrastructure today are building durable moats. The open-source ecosystem is not replacing proprietary models — it is restructuring where AI value is created and captured.",
+        wide: true,
+        stat: "Value layer: Data + Orchestration", statBg: "#E8F0FE", statColor: "#1A73E8"
+      }
+    ]
+  }
+};
+
+// ── KEYWORD MATCHING ──────────────────────────────────────────────────────────
+
+function matchQuery(raw) {
+  const q = raw.toLowerCase().trim();
+
+  const matchers = {
+    "generative-ai": [
+      "generative","gen ai","genai","llm adoption","enterprise ai","gpt","chatgpt",
+      "copilot","openai","anthropic","claude","gemini","foundation model","large language",
+      "ai adoption","ai strategy","ai enterprise","ai productivity","ai governance"
+    ],
+    "data-platform": [
+      "data platform","data platforms","lakehouse","snowflake","databricks","consolidation",
+      "data warehouse","data lake","iceberg","delta lake","hadoop","etl","elt","kafka",
+      "data stack","data infrastructure","data architecture","data engineering","data mesh",
+      "data","analytics platform","redpanda","confluent","dbt","fivetran","airbyte"
+    ],
+    "cloud-fintech": [
+      "cloud migration","fintech","finance","banking","financial services","bank",
+      "dora","fca","open banking","baas","banking as a service","cloud fintech",
+      "cloud banking","core banking","hybrid cloud","multi-cloud","cloud strategy",
+      "cloud infrastructure","cloud adoption","cloud native","aws","azure","gcp",
+      "cloud","migration strategy","digital banking"
+    ],
+    "open-source-llm": [
+      "open source","open-source","llama","mistral","hugging face","huggingface",
+      "fine-tuning","fine tuning","lora","qlora","quantisation","quantization",
+      "open weight","open model","phi","gemma","falcon","community model",
+      "on-device","edge ai","edge inference","self-hosted","local llm","oss llm",
+      "open llm","model fine","domain specific model"
+    ]
+  };
+
+  // Score each category by counting keyword hits
+  let bestKey = null;
+  let bestScore = 0;
+
+  for (const [key, keywords] of Object.entries(matchers)) {
+    let score = 0;
+    for (const kw of keywords) {
+      if (q.includes(kw)) {
+        // Longer matches score higher
+        score += kw.split(" ").length;
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestKey = key;
+    }
+  }
+
+  return bestKey;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+
+function renderResults(key) {
+  const d = INSIGHTS[key];
+  if (!d) return renderNotFound();
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+
+  let cardsHtml = d.cards.map((c, i) => `
+    <div class="insight-card ${c.wide ? 'wide' : ''}" style="animation-delay:${(i+2)*0.07}s">
+      <div class="card-icon-wrap" style="background:${c.iconBg}">${c.icon}</div>
+      <div class="card-label" style="color:${c.labelColor}">${c.label}</div>
+      <div class="card-title">${c.title}</div>
+      <div class="card-body">${c.body}</div>
+      <span class="card-stat" style="background:${c.statBg};color:${c.statColor}">${c.stat}</span>
+    </div>
+  `).join('');
+
+  let signalsHtml = d.signals.map(s => `
+    <div class="signal">
+      <span class="signal-dot" style="background:${s.color}"></span>
+      ${s.label}
+    </div>
+  `).join('');
+
+  return `
+    <div class="results-header">
+      <div>
+        <div class="results-query">Analysis for</div>
+        <div class="results-title">${d.title}</div>
+      </div>
+      <div class="results-meta">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Synthesised · ${timeStr}
+      </div>
+    </div>
+
+    <div class="signal-bar" style="animation-delay:.05s">
+      <div class="signal-bar-title">Macro Signals Detected</div>
+      <div class="signals">${signalsHtml}</div>
+    </div>
+
+    <div class="section-label" style="animation-delay:.1s">Key Insights</div>
+    <div class="results-grid">${cardsHtml}</div>
+  `;
+}
+
+function renderNotFound() {
+  return `
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <h3>No data for this query</h3>
+      <p>Try one of the suggested topics below the search bar,<br>or refine your query to match a tracked trend.</p>
+    </div>
+  `;
+}
+
+function showLoader() {
+  return `
+    <div class="loader">
+      <div class="loader-dots">
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+      </div>
+      <div class="loader-text">Aggregating macro signals…</div>
+      <div class="loader-sub">Synthesising industry intelligence</div>
+    </div>
+  `;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+
+const emptyState = document.getElementById('empty-state');
+const resultsContent = document.getElementById('results-content');
+
+function runAnalysis(rawQuery) {
+  emptyState.style.display = 'none';
+  resultsContent.style.display = 'block';
+  resultsContent.innerHTML = showLoader();
+
+  // Fake async for polish
+  setTimeout(() => {
+    const key = matchQuery(rawQuery);
+    resultsContent.innerHTML = renderResults(key);
+    window.scrollTo({ top: document.querySelector('#results-area').offsetTop - 80, behavior: 'smooth' });
+  }, 900);
+}
+
+// Search button
+document.getElementById('search-btn').addEventListener('click', () => {
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) return;
+  updateChips(null);
+  runAnalysis(q);
+});
+
+// Enter key
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const q = e.target.value.trim();
+    if (!q) return;
+    updateChips(null);
+    runAnalysis(q);
+  }
+});
+
+// Chips
+function updateChips(activeKey) {
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.query === activeKey);
+  });
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const key = chip.dataset.query;
+    const label = chip.textContent.trim();
+    document.getElementById('search-input').value = label;
+    updateChips(key);
+    runAnalysis(label);
+  });
+});
+</script>
+</body>
+</html>
